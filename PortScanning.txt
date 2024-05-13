@@ -1,0 +1,112 @@
+
+To start port scanning we have to do the following steps:
+
+1-check the server ( destination) is up and running  
+
+2-check the network availability and reachability between the client (my pc) and the server
+   using ICMP Protocol (Ping command)
+  
+  -> taking google as an example:
+
+	open CMD Window 
+	
+	if it is well known to DNS and its name could be resolved we use the name if not we use the IP
+
+  	ping google.com
+	
+	C:\Users\Maha>ping google.com
+
+	Pinging google.com [216.58.204.238] with 32 bytes of data:
+	Reply from 216.58.204.238: bytes=32 time=91ms TTL=115
+	Reply from 216.58.204.238: bytes=32 time=80ms TTL=115
+	Reply from 216.58.204.238: bytes=32 time=81ms TTL=115
+	Reply from 216.58.204.238: bytes=32 time=68ms TTL=115
+
+	Ping statistics for 216.58.204.238:
+ 	  	 Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+	Approximate round trip times in milli-seconds:
+   	 	Minimum = 68ms, Maximum = 91ms, Average = 80ms
+
+	
+	-if it came with reply , then we have passed the first two steps we follow with the next step 	( port scanning  )
+
+	- on windows we cannot use ping to check on the port checking maybe on linux or kali would be available 
+	
+	- we use telnet command with specifying the dest. port
+		we start by scanning well known ports like 
+
+		21	FTP ( DAta Transfare )
+		22	SSH ( Network device communication )
+		23	Telnet ( Network device communication )
+		25	SMTP ( mail )
+		49	TACACS ( Centeral Authentication Server )
+		53	DNS
+		80	HTTP
+		110	PoP3
+		443	HTTPS
+		465     SMTP TCP
+		3389 	RDP (Remote desktop connection)
+
+		Telnet Server Name / Server IP Port No.
+
+		Telnet google.com 80 / 443
+
+		if the connection started the port is open and avilabile 
+
+
+	PS C:\Users\Maha> telnet google.com 21
+	Connecting To google.com...Could not open connection to the host, on port 21: Connect failed
+	PS C:\Users\Maha> telnet google.com 22
+	Connecting To google.com...Could not open connection to the host, on port 22: Connect failed
+	PS C:\Users\Maha> telnet google.com 23
+	Connecting To google.com...Could not open connection to the host, on port 23: Connect failed
+	
+
+
+in order to automate the cod we are using paython code 
+
+	- we started by importing two main library Socket and tkinter
+
+	- 
+-----------------------------------------------------------------------------------------------------
+ Here's a breakdown of the code:
+
+**Imports:**
+
+- tkinter as tk`: Imports the `tkinter` module for creating the GUI elements.
+- from socket import *`: Imports all functions from the `socket` module for network communication.
+
+**Functions:**
+
+- `connect_scan(tgtHost, tgtPort)`:
+    - Attempts to create a TCP socket connection to the target host (`tgtHost`) on the specified port 	(`tgtPort`).
+    - Sets a timeout of 1 second for the connection attempt.
+    - If successful, returns a message indicating the port is open.
+    - If unsuccessful, returns a message indicating the port is closed.
+- `port_scan(tgtHost, tgtPorts)`:
+    - Tries to resolve the target hostname (`tgtHost`) to an IP address.
+    - If resolution fails, returns an error message.
+    - Creates an empty list `results` to store scan results.
+    - Iterates through a list of target ports (`tgtPorts`).
+        - For each port, calls `connect_scan` to check its status.
+        - Appends the scan result for the port to the `results` list.
+    - Returns the list of scan results.
+- `start_scan()`:
+    - Gets the target host name from the user input field (`entry.get()`).
+    - Defines a list of common ports to scan (`ports`). You can customize this list.
+    - Calls `port_scan` to scan the target host for the specified ports.
+    - Formats the scan results into a string with each result on a new line (`\n`.join(results))
+    - Sets the text of the result label (`result_text`) to the formatted results.
+
+**GUI Creation:**
+
+- Creates a main application window (`app`) with the title "Port Scanner".
+- Creates a canvas (`canvas`) to hold the background image.
+- Loads a background image (`landscape.png`) and displays it on a label (`background_label`).
+- Creates a frame (`frame`) to hold the input and button elements.
+- Creates an entry field (`entry`) for the user to enter the target host name.
+- Creates a button (`button`) with the text "Search for Port" that triggers the `start_scan` function when clicked.
+- Creates a label (`result_label`) to display the scan results. It uses a string variable (`result_text`) to dynamically update the content.
+- Starts the main event loop (`app.mainloop()`) to keep the GUI running and responsive to user interactions.
+
+Overall, this code demonstrates how to combine network programming (`socket`) with a GUI framework (`tkinter`) to create a useful tool for scanning ports on a target host.
